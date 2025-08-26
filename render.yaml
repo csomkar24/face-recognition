@@ -1,0 +1,114 @@
+# Render.com deployment configuration for Face Recognition Attendance System
+# This file defines the services needed to deploy the application
+
+services:
+  # Backend API Service
+  - type: web
+    name: face-recognition-backend
+    env: node
+    plan: starter
+    region: oregon
+    buildCommand: |
+      cd backend
+      npm install
+    startCommand: cd backend && node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: DB_HOST
+        fromDatabase:
+          name: face-attendance-db
+          property: host
+      - key: DB_USER
+        fromDatabase:
+          name: face-attendance-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: face-attendance-db
+          property: password
+      - key: DB_NAME
+        fromDatabase:
+          name: face-attendance-db
+          property: database
+      - key: DB_PORT
+        fromDatabase:
+          name: face-attendance-db
+          property: port
+    healthCheckPath: /api/test
+    autoDeploy: true
+    disk:
+      name: backend-storage
+      mountPath: /opt/render/project/src/backend/uploads
+      sizeGB: 1
+
+  # Frontend Static Site
+  - type: web
+    name: face-recognition-frontend
+    env: static
+    plan: starter
+    region: oregon
+    buildCommand: |
+      # Copy frontend files to build directory
+      mkdir -p build
+      cp -r frontend/* build/
+      # Update API endpoints to use backend service URL
+      sed -i 's|/api/|https://face-recognition-backend.onrender.com/api/|g' build/js/*.js
+    staticPublishPath: ./build
+    envVars:
+      - key: NODE_ENV
+        value: production
+    autoDeploy: true
+    routes:
+      - type: rewrite
+        source: /api/*
+        destination: https://face-recognition-backend.onrender.com/api/*
+
+databases:
+  # MySQL Database
+  - name: face-attendance-db
+    databaseName: face_attendance_system
+    user: face_attendance_user
+    plan: starter
+    region: oregon
+    ipAllowList: []
+    # Initialize database with schema
+    initScript: |
+      -- This script will be run when the database is first created
+      -- The actual schema.sql content will be executed here
+      CREATE DATABASE IF NOT EXISTS face_attendance_system;
+      USE face_attendance_system;
+      
+      -- Create students table
+      CREATE TABLE IF NOT EXISTS students (
+          USN VARCHAR(20) PRIMARY KEY,
+          Name VARCHAR(100) NOT NULL,
+          FaceData TEXT NOT NULL,
+          Semester INT
+      );
+      
+      -- Create sessions table
+      CREATE TABLE IF NOT EXISTS sessions (
+          SessionID INT AUTO_INCREMENT PRIMARY KEY,
+          SessionDate DATE NOT NULL,
+          Semester VARCHAR(10) NOT NULL
+      );
+      
+      -- Create attendance table
+      CREATE TABLE IF NOT EXISTS attendance (
+          AttendanceID INT AUTO_INCREMENT PRIMARY KEY,
+          SessionID INT,
+          USN VARCHAR(20),
+          AttendanceStatus ENUM('Present', 'Absent') NOT NULL,
+          FOREIGN KEY (SessionID) REFERENCES sessions(SessionID),
+          FOREIGN KEY (USN) REFERENCES students(USN)
+      );
+
+# Environment variables for the entire project
+envVars:
+  - key: NODE_ENV
+    value: production
+  - key: CORS_ORIGIN
+    value: https://face-recognition-frontend.onrender.com
