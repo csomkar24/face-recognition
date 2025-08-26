@@ -1,0 +1,475 @@
+/* Base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f7fa;
+    color: #222 !important;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    animation: fadeIn 1s cubic-bezier(.4,0,.2,1);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: none; }
+}
+
+/* Header styles */
+header {
+    background: #2c3e50;
+    color: #fff !important;
+    padding: 36px 20px 24px 20px;
+    border-radius: 22px 22px 0 0;
+    box-shadow: 0 4px 20px rgba(44, 62, 80, 0.1);
+    margin-bottom: 0;
+    position: relative;
+}
+
+header h1 {
+    font-family: 'Poppins', sans-serif;
+    margin-bottom: 18px;
+    text-align: center;
+    font-size: 2.7rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #fff !important;
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    gap: 24px;
+    position: relative;
+}
+
+nav ul li a {
+    color: #fff !important;
+    text-decoration: none;
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1.13rem;
+    transition: all 0.3s ease;
+    position: relative;
+    letter-spacing: 1px;
+}
+
+nav ul li a.active, nav ul li a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff !important;
+    transform: translateY(-2px);
+}
+
+/* Main content styles */
+main {
+    background: #ffffff;
+    padding: 36px 20px;
+    border-radius: 0 0 22px 22px;
+    box-shadow: 0 4px 20px rgba(44, 62, 80, 0.1);
+    margin-top: -8px;
+    min-height: 600px;
+    animation: fadeIn 1.2s cubic-bezier(.4,0,.2,1);
+    backdrop-filter: blur(6px);
+    color: #222 !important;
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.7s cubic-bezier(.4,0,.2,1);
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Form styles */
+.form-group {
+    margin-bottom: 18px;
+    position: relative;
+}
+
+label {
+    display: block;
+    margin-bottom: 7px;
+    font-weight: 600;
+    color: #1a237e !important;
+    letter-spacing: 0.5px;
+}
+
+input, select, textarea {
+    color: #222 !important;
+    background: #fff !important;
+    border: 1px solid #b3c0e6;
+}
+
+input:focus, select:focus {
+    color: #222 !important;
+    background: #fff !important;
+    border-color: #1976d2;
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
+}
+
+::placeholder {
+    color: #888 !important;
+    opacity: 1;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 13px 16px;
+    border: 1px solid #e0e6ed;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+button {
+    background: #3498db;
+    color: #fff !important;
+    border: none;
+    padding: 13px 28px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.13rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+button:hover, button:focus {
+    background: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button:disabled {
+    background: #bdc3c7;
+    color: #7f8c8d;
+    cursor: not-allowed;
+}
+
+/* Attendance tab styles */
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.controls .form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.video-container {
+    position: relative;
+    width: 100%;
+    height: 480px;
+    background-color: #000;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+video, #overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#overlay {
+    z-index: 10;
+}
+
+.recognition-status, #status, .recognition-status p {
+    color: #1a237e !important;
+    font-weight: 600;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+}
+
+.attendance-summary {
+    margin-bottom: 20px;
+}
+
+.attendance-summary h3,
+.recognized-students h3 {
+    margin-bottom: 10px;
+    color: #1a237e !important;
+    font-weight: 700;
+}
+
+.recognized-students ul {
+    list-style: none;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.recognized-students li {
+    padding: 8px;
+    border-bottom: 1px solid #b3c0e6;
+    color: #222 !important;
+    background: #e3eafc !important;
+    font-weight: 500;
+}
+
+.recognized-students li:last-child {
+    border-bottom: none;
+}
+
+/* Registration tab styles */
+#registration-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.registration-video-container {
+    position: relative;
+    width: 100%;
+    height: 360px;
+    background-color: #000;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+#capture-status {
+    margin: 10px 0;
+    font-style: italic;
+}
+
+/* Reports tab styles */
+.report-filters {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.report-filters .form-group {
+    flex: 1;
+    margin-bottom: 0;
+    min-width: 200px;
+}
+
+.report-filters input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.report-content {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(44, 62, 80, 0.08);
+    margin-bottom: 28px;
+    padding: 24px;
+    border: 1px solid #e0e6ed;
+    color: #2c3e50 !important;
+}
+
+.report-content:hover {
+    box-shadow: 0 4px 16px rgba(44, 62, 80, 0.12);
+}
+
+.report-summary {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 8px;
+    flex-wrap: wrap;
+    gap: 10px;
+    border: 1px solid #e0e6ed;
+}
+
+.report-summary p {
+    margin: 0;
+    padding: 8px 16px;
+    background: #f5f7fa !important;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(44, 62, 80, 0.1);
+    font-weight: 700;
+    color: #1a237e !important;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 1px;
+}
+
+.report-table-container {
+    margin-bottom: 20px;
+    overflow-x: auto;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(44, 62, 80, 0.1);
+    border: 1px solid #e0e6ed;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0;
+    font-size: 1rem;
+    color: #2c3e50;
+}
+
+th, td {
+    padding: 15px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e6ed;
+}
+
+th {
+    background: #1a237e !important;
+    font-weight: 600;
+    color: #fff !important;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 1px;
+    font-size: 1.08rem;
+}
+
+tr:nth-child(even) td {
+    background: #f5f7fa !important;
+}
+
+tr:hover td {
+    background: #e3eafc !important;
+}
+
+.present {
+    color: #27ae60 !important;
+    font-weight: 700;
+}
+
+.absent {
+    color: #e74c3c !important;
+    font-weight: 700;
+}
+
+#exportReport, #exportPDF {
+    background: #3498db;
+    margin-right: 10px;
+    margin-bottom: 0;
+}
+
+#exportReport:hover, #exportPDF:hover {
+    background: #2980b9;
+}
+
+#generateReport {
+    background: #2c3e50;
+    color: #ffffff;
+}
+
+#generateReport:hover {
+    background: #34495e;
+}
+
+/* Footer styles */
+footer {
+    margin-top: 20px;
+    text-align: center;
+    color: #222 !important;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+}
+
+/* Animations for tab switching */
+.tab-content {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s, transform 0.5s;
+}
+.tab-content.active {
+    opacity: 1;
+    transform: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .container { padding: 8px; }
+    main { padding: 12px; }
+    header { padding: 18px 8px 12px 8px; }
+}
+
+@media (max-width: 768px) {
+    .controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+    .controls .form-group {
+        width: 100%;
+    }
+    .controls button {
+        width: 100%;
+    }
+    nav ul { flex-direction: column; align-items: center; gap: 8px; }
+    .video-container, .registration-video-container { height: 220px; }
+    .report-summary { flex-direction: column; }
+    .report-summary p { margin-bottom: 10px; }
+}
+
+.attendance-flex-container {
+    display: flex;
+    gap: 24px;
+    align-items: stretch;
+}
+
+.attendance-side-panel {
+    background: #fff;
+    border: 2px solid #222;
+    border-radius: 12px;
+    padding: 18px 18px 18px 18px;
+    min-width: 260px;
+    max-width: 350px;
+    flex: 1;
+    height: 100%;
+    align-items: stretch;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    justify-content: flex-start;
+}
+
+.attendance-summary h3,
+.recognized-students h3 {
+    margin-top: 0;
+    font-weight: 700;
+    color: #222;
+}
+
+@media (max-width: 900px) {
+    .attendance-flex-container {
+        flex-direction: column;
+    }
+    .attendance-side-panel {
+        max-width: 100%;
+        margin-top: 24px;
+        min-height: 220px;
+        height: auto;
+    }
+}

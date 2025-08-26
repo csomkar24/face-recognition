@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition Attendance System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Face Recognition Attendance System</h1>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active" data-tab="attendance">Take Attendance</a></li>
+                    <li><a href="#" data-tab="register">Register Student</a></li>
+                    <li><a href="#" data-tab="reports">View Reports</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Attendance Tab -->
+            <section id="attendance" class="tab-content active">
+                <div class="attendance-flex-container" style="display: flex; gap: 24px; align-items: flex-start;">
+                    <div class="attendance-main-panel" style="flex: 2;">
+                        <div class="controls">
+                            <div class="form-group">
+                                <label for="sessionSemester">Semester:</label>
+                                <select id="sessionSemester">
+                                    <option value="1">Semester 1</option>
+                                    <option value="2">Semester 2</option>
+                                    <option value="3">Semester 3</option>
+                                    <option value="4">Semester 4</option>
+                                    <option value="5">Semester 5</option>
+                                    <option value="6">Semester 6</option>
+                                    <option value="7">Semester 7</option>
+                                    <option value="8">Semester 8</option>
+                                </select>
+                            </div>
+                            <button id="startSession">Start New Session</button>
+                            <button id="toggleCamera">Start Camera</button>
+                        </div>
+                        <div class="video-container">
+                            <video id="video" autoplay muted></video>
+                            <canvas id="overlay"></canvas>
+                        </div>
+                        <div class="recognition-status">
+                            <p id="status">Face recognition system initialized</p>
+                        </div>
+                    </div>
+                    <div class="attendance-side-panel" style="flex: 1; min-width: 260px;align-items: stretch; max-width: 350px; background: #fff; border: 2px solid #222; border-radius: 12px; padding: 18px 18px 18px 18px;">
+                        <div class="attendance-summary">
+                            <h3 style="margin-top:0;">Attendance Summary</h3>
+                            <div id="summary-content">
+                                <p>Session ID: <span id="current-session">Not started</span></p>
+                                <p>Present: <span id="present-count">0</span> / <span id="total-count">0</span></p>
+                            </div>
+                        </div>
+                        <div class="recognized-students">
+                            <h3>Recognized Students</h3>
+                            <ul id="recognized-list"></ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Register Student Tab -->
+            <section id="register" class="tab-content">
+                <form id="registration-form">
+                    <div class="form-group">
+                        <label for="studentUSN">USN:</label>
+                        <input type="text" id="studentUSN" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentName">Name:</label>
+                        <input type="text" id="studentName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentSemester">Semester:</label>
+                        <select id="studentSemester" required>
+                            <option value="1">Semester 1</option>
+                            <option value="2">Semester 2</option>
+                            <option value="3">Semester 3</option>
+                            <option value="4">Semester 4</option>
+                            <option value="5">Semester 5</option>
+                            <option value="6">Semester 6</option>
+                            <option value="7">Semester 7</option>
+                            <option value="8">Semester 8</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Face Capture:</label>
+                        <div class="registration-video-container">
+                            <video id="reg-video" autoplay muted></video>
+                            <canvas id="reg-overlay"></canvas>
+                        </div>
+                        <button type="button" id="captureBtn">Capture Face</button>
+                        <p id="capture-status">No face captured yet</p>
+                    </div>
+                    <button type="submit" id="registerBtn" disabled>Register Student</button>
+                </form>
+            </section>
+
+            <!-- Reports Tab -->
+            <section id="reports" class="tab-content">
+                <div class="report-filters">
+                    <div class="form-group">
+                        <label for="reportSemester">Semester:</label>
+                        <select id="reportSemester">
+                            <option value="all">All Semesters</option>
+                            <option value="1">Semester 1</option>
+                            <option value="2">Semester 2</option>
+                            <option value="3">Semester 3</option>
+                            <option value="4">Semester 4</option>
+                            <option value="5">Semester 5</option>
+                            <option value="6">Semester 6</option>
+                            <option value="7">Semester 7</option>
+                            <option value="8">Semester 8</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="reportDate">Date:</label>
+                        <input type="date" id="reportDate">
+                    </div>
+                    <button id="generateReport" style="margin-top: 30px;">Generate Report</button>
+                </div>
+
+                <div class="report-content">
+                    <h3>Attendance Report</h3>
+                    <div class="report-summary">
+                        <p>Total Students: <span id="report-total">0</span></p>
+                        <p>Present: <span id="report-present">0</span></p>
+                        <p>Absent: <span id="report-absent">0</span></p>
+                        <p>Attendance Rate: <span id="report-rate">0%</span></p>
+                    </div>
+                    <div class="report-table-container">
+                        <table id="report-table">
+                            <thead>
+                                <tr>
+                                    <th>USN</th>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="report-data">
+                                <!-- Report data will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <button id="exportReport">Export to CSV</button>
+                    <button id="exportPDF">Export to PDF</button>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Face Recognition Attendance System</p>
+        </footer>
+    </div>
+
+    <!-- Load JavaScript files -->
+    <script src="js/main.js"></script>
+    <script src="js/attendance.js"></script>
+    <script src="js/faceRecognition.js"></script>
+    <script src="js/registration.js"></script>
+    <script src="js/reports.js"></script>
+
+    <style>
+        main {
+            height: 100%;
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+        .attendance-flex-container {
+            flex: 1 1 auto;
+            height: 100%;
+            min-height: 500px;
+        }
+    </style>
+</body>
+</html>
